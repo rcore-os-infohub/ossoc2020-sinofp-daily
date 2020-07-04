@@ -10,7 +10,6 @@ struct Person {
     age: usize,
 }
 
-// I AM NOT DONE
 // Your task is to complete this implementation
 // in order for the line `let p = Person::try_from("Mark,20")` to compile
 // and return an Ok result of inner type Person.
@@ -28,6 +27,17 @@ struct Person {
 impl TryFrom<&str> for Person {
     type Error = String;
     fn try_from(s: &str) -> Result<Self, Self::Error> {
+        if s.len() == 0 {
+            Err("怎么回事小老弟？".to_owned())
+        } else {
+            let na: Vec<&str> = s.split(',').collect();
+            let name = na[0].to_owned();
+            let age_res = na[1].parse();
+            match age_res {
+                Err(e) => Err("怎么回事小老弟？".to_owned()),
+                Ok(age) => Ok(Person { name, age })
+            }
+        }
     }
 }
 
