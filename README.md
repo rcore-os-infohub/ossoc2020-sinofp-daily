@@ -90,3 +90,12 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     我也不明白意义不明的“15道笨方法学XXX练习题”是个啥意思，既然说可以用算法题代替，就选了leetcode了。放在fifteen-exercises里。
 
     和昨天做人家挖好空的rustlings不同，自己写更加感受到了什么叫和编译器格斗。以及对着Option使用map真好。rust的map不止可以处理迭代器，有点通用，都是举起包装直接对里面的货物进行操作。我记得Haskell有个fmap，感觉可能是类似的。
+
+## 200706
+
+今天有事
+
+- 看了一部分《Rust编程之道》unsafe的部分
+- 做了一道leetcode一道codewars
+
+    主要是leetcode很多题目不适合rust，看看codewars
