@@ -99,3 +99,53 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 - 做了一道leetcode一道codewars
 
     主要是leetcode很多题目不适合rust，看看codewars
+
+## 200707
+
+今天有事
+
+- 大致看完《Rust编程之道》第十三章
+    
+    > 学习 Unsafe Rust 才能对 Safe Rust 有更深的理解 —— 本章小结
+
+    <details>
+    <summary>unsafe这章内容可太多了……</summary>
+
+    - unsafe在解引用裸指针、调用unsafe函数、访问修改该可变静态变量、实现unsafe trait、读写union中的字段时不会进行安全检查
+
+    - 用#\[repr(C)\]告诉编译器使用C语言内存布局
+
+    - 解引用优先级低于方法，高于as
+
+    - as_ptr指向的是存放数据堆/栈的指针，引用是对本身的引用
+
+    - 型变（variance）
+
+        Cat是Animal子类型
+
+        - 协变（covariant）：List\<Cat\>是List\<Animal\>子类型
+
+            Rust大部分结构是协变的（感觉其他语言也是）
+
+            Rust的协变以忘记原始生命周期为代价
+
+        - 逆变（contravariant）：List\<Animal\>是List\<Cat\>子类型
+
+        - 协变（invariant）：List\<Cat\>和List\<Animal\>没关系
+
+        - 长生命周期是短生命周期的子类型
+
+        这玩意前所未闻见所未见……
+
+        - 当协变不会引起ub时，可以用协变，否则保证该类型为不变或逆变
+    
+    - 有时要改变变量声明顺序，方便编译器推导drop顺序
+
+    - ABI包括调用约定、内存布局、处理器指令集、二进制格式——老听说C ABI，在学rust时知道是啥了
+
+    - C中可以用结构体模拟元组，传递更复杂类型可以用Opaque和Box\<T\>对应
+
+    - 还写了和各种其他语言互动，甚至讲了wasm基本概念，这书快赶上百科全书了
+    </details>
+
+- 写了一道codewars，两道leetcode
