@@ -95,7 +95,7 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 
 今天有事
 
-- 看了一部分《Rust编程之道》unsafe的部分
+- 看了一部分《Rust编程之道》unsafe章节
 - 做了一道leetcode一道codewars
 
     主要是leetcode很多题目不适合rust，看看codewars
@@ -149,3 +149,14 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     </details>
 
 - 写了一道codewars，两道leetcode
+
+## 200708
+
+今天有事
+
+- 看了一部分《Rust编程之道》模块化章节
+- 写了两道leetcode
+
+    - leetcode竟然有生命游戏，我以为都是奇怪的算法题
+
+    - rust的字符串很麻烦，不能`string[index]`获取字符，要`string[index..].chars().next().unwrap()`。我的天啊，这就是安全么？还是说我用错了。
