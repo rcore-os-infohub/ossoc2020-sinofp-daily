@@ -160,3 +160,15 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     - leetcode竟然有生命游戏，我以为都是奇怪的算法题
 
     - rust的字符串很麻烦，不能`string[index]`获取字符，要`string[index..].chars().next().unwrap()`。我的天啊，这就是安全么？还是说我用错了。
+
+## 200709
+
+今天有事
+
+- 把《Rust编程之道》模块化章节10.3节之外的内容看完了
+
+    貌似“完成《Rust 编程之道》第十章的完整示例代码”指的是10.3，明天看
+
+- 写了两道leetcode
+
+    rust也可以在函数里定义函数，很好，我喜欢
