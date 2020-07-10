@@ -172,3 +172,13 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 - 写了两道leetcode
 
     rust也可以在函数里定义函数，很好，我喜欢
+
+## 200710
+
+- 完成了《Rust编程之道》第十章的示例代码
+- 看完了《计算机组成与设计 RISC-V版》第一章
+- 补充了15道练习题其他语言的实现
+
+    写了几天rust去写c++感觉c++可太爽了
+
+- 写了一道leetcode
