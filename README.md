@@ -182,3 +182,11 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     写了几天rust去写c++感觉c++可太爽了
 
 - 写了一道leetcode
+
+## 200711
+
+- 把《计算机组成与设计 RISC-V版》第二章看了一半
+
+    有很多学过的内容，但就在这些内容里也能获得新的认知。为什么我们不用这本当教材？
+
+- 写了三道leetcode，至此15道练习题写完了
