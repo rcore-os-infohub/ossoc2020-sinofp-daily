@@ -204,3 +204,17 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 
     - 接下来要看看内联汇编，后面应该还会经常用到
     - OpenSBI是个好东西，不仅实现了bootloader，还提供一些实用过程，棒！
+
+## 200712
+
+今天有事
+
+- 看了llvm_asm!
+    
+    昨天说要看是因为我的lsp客户端提示应该用asm!，写完日志发现俺的客户端有问题，的确应该用llvm_asm!，那没事了……
+
+- 写（复制）完了lab1
+
+    - 我不知道这是咋回事啊，rcore是直接给代码的么？我以为也是会挖空的，但这个复制下来解决解决编译错误就能跑。明天不看新的了，画画图（趁刚开始）、整理整理代码
+    - rcore fork了rust-embedded/riscv，但我看貌似也没有巨大变化，所以直接用了原版，之后有问题再换回来
+    - 挺喜欢rcore tutorial直接用OpenSBI、riscv crate的，这样源码里不会出现大量工具代码（不过可能之后的lab会有？）
