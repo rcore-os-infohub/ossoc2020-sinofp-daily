@@ -1,0 +1,32 @@
+@startuml rcore
+start
+:entry.asm;
+note right
+    通过linker.ld指定（放到OpenSBI的起始地址）
+    使用linker.ld是因为编译器默认为每个文件生成一个内存布局，而我们要把它们合成一个
+end note
+partition 初始化 {
+    :rust_main()\n main.rs;
+    :interrupt::init()\n interrupt/mod.rs;
+    partition interrupt初始化 {
+        :handler::init();
+        note right
+            设置__interrupt()为中断入口函数（设置stvec为Direct模式，BASE地址是__interrupt()）
+            函数体在interrupt.asm中\n寄存器压栈、调用handle_interrupt()并传入相关参数，然后复原寄存器
+            所谓“Context”只是sstatus和sepc寄存器的值
+            handle_interrupt()是个match
+        end note
+        :timer::init();
+        note right
+            开启sie，使能时钟中断
+            开启sstatus的SIE位，允许内核态被中断打断
+            set_next_timeout的原理是使用OpenSBI提供的sbi_set_timer C函数
+
+            另外SBI提供的函数可以在这里找到偏移量：https://github.com/riscv/riscv-sbi-doc/blob/master/riscv-sbi.adoc#function-listing-1
+            sbi.rs就是封装了ecall这些函数的汇编代码
+        endnote
+    }
+    :rust_main(main.rs);
+}
+end
+@enduml
