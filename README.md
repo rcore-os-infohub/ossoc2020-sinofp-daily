@@ -205,7 +205,7 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     - 接下来要看看内联汇编，后面应该还会经常用到
     - OpenSBI是个好东西，不仅实现了bootloader，还提供一些实用过程，棒！
 
-## 200712
+## 200713
 
 今天有事
 
@@ -219,7 +219,7 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     - rcore fork了rust-embedded/riscv，但我看貌似也没有巨大变化，所以直接用了原版，之后有问题再换回来
     - 挺喜欢rcore tutorial直接用OpenSBI、riscv crate的，这样源码里不会出现大量工具代码（不过可能之后的lab会有？）
 
-## 200712
+## 200714
 
 今天有事，很累
 
@@ -230,3 +230,7 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     - 另外plantuml貌似画不出想要的样子，它的活动图太结构化了，而我想要箭头随便指
     - 画图有助于关注细节，因为得想这部分代码有什么作用
     - 得知rcore也是有题目的，就在“实验题”部分，只有两个的原因是还没写完。明天写一个看看，顺带完善一下图
+
+## 200715
+
+今天有事，回来很晚，摸了
