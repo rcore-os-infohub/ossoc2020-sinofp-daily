@@ -252,11 +252,11 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 - 写了实验一
 
     1. 简述
-    
+
         既然有gdb，为什么不用它呢？
-        
+
         因为有部分是汇编，所以不能n、n、n、n，得si、si、si、si……
-        
+
         ```中文
         ebreak前：80216650
             进入__interrupt -> 80216540
@@ -273,23 +273,26 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
         ```
 
     2. 回答
+
+        ```shell
+        src/interrupt/handler.rs:66: 'Unresolved interrupt: Exception(LoadFault)
+        Context { registers: [3, 80200044, 80216580, 0, 8001de00, 1, 82200000, 82200000, 8001dd70, 8000000000006800, 0, 3f, 3f, 0, 0, 802163a4, 4, 1, 1, 8000000000006800, 80200000, 82200000, 0, 0, 2000, 0, 0, 0, 80200000, 0, 0, 0], sstatus: Sstatus { bits: 8000000000006120 }, sepc: 80201a42 }
+        stval: 0'
+        ```
+
+        rust_main返回后回到entry.asm，entry.asm在调用rust_main之后没有写代码。这里的LoadFualt应该是二进制文件里下一条（总之要有一条）请求了不存在的地址0 → 见stval 0
        
-       ```shell
-       src/interrupt/handler.rs:66: 'Unresolved interrupt: Exception(LoadFault)
-Context { registers: [3, 80200044, 80216580, 0, 8001de00, 1, 82200000, 82200000, 8001dd70, 8000000000006800, 0, 3f, 3f, 0, 0, 802163a4, 4, 1, 1, 8000000000006800, 80200000, 82200000, 0, 0, 2000, 0, 0, 0, 80200000, 0, 0, 0], sstatus: Sstatus { bits: 8000000000006120 }, sepc: 80201a42 }
-stval: 0'
-       ```
-       rust_main返回后回到entry.asm，entry.asm在调用rust_main之后没有写代码。这里的LoadFualt应该是二进制文件里下一条（总之要有一条）请求了不存在的地址
-       
-       那我觉得entry.asm在rust_main之后可以ecall终止，做个双保险
+        那我觉得entry.asm在rust_main之后可以ecall终止，做个双保险
     
     3. 实验
     
         rcore-tutorial通过切换分支改实验，而我这本来就是一个仓库了，不知道怎么把代码放上来比较好……方法和答案一样
 
+        不过触发那里，我去掉rust_main最后的painc就可以直接请求地址0了，见上题。去掉后疯狂输出SUCCESS！
+
 - 感觉之前可能会错意了，应该是让我们跟着指导写自己的操作系统？
 
-    写了指导1、2的内容，不过因为看过了再写，而且这两个指导都是基础设施（Makefile、boot的汇编、切换上下文的汇编、println、SBI相关……），也不好写成别的样子，所以内容没啥大变动。
+    重写了指导1、2的内容，不过因为看过了再写，而且这两个指导都是基础设施（Makefile、boot的汇编、切换上下文的汇编、println、SBI相关……），也不好写成别的样子，所以内容没啥大变动。
 
 - 快速浏览了《RISC-V手册：一本开源指令集的指南》第十章
 
