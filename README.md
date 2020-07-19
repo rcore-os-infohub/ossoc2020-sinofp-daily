@@ -312,3 +312,31 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     有些已经停更了，有些大佬已经飞速进展快做完了，还有些大大佬已经完全在表演艺术了。
 
     我看有一些人是先整体看完所有指导再回头写代码、报告的，是个好方法，明天要么完善指导2代码，要么开始浏览后面的。
+
+## 200719
+
+- 做指导2
+
+    - 动态内存分配
+
+        既然说要用写好的crate，首先要在依赖中加入`buddy_system_allocator = "0.4.0"`
+
+        - error[E0433]: failed to resolve: use of undeclared type or module `alloc`
+
+            在main.rs里加`extern crate alloc;`，rust 2015曾经要求全部外部模块都要用它，2018自动为dependencies里的模块插入，但是在no_std下要用到rust core中的模块时，还是要手动加入这句extern crate
+
+        - error[E0412]: cannot find type `LockedHeap` in this scope
+
+            这应该就是指导里说的调用细节之一，加个use：`use buddy_system_allocator::LockedHeap;`
+
+        - error[E0425]: cannot find value `KERNEL_HEAP_SIZE` in this scope
+
+            加个`use crate::memory::config::KERNEL_HEAP_SIZE;`，感觉吧，rust有点傻
+
+        - error[E0658]: the `#[alloc_error_handler]` attribute is an experimental feature
+
+            这个超棒，rust直接把解决方法说了：main.rs加个`#![feature(alloc_error_handler)]`
+
+        到这里，Rust的“malloc”和“free”就全部支持了（当然还有找不到对应的alloc_error_handler）
+
+        复制指导里的Box、Vec测试，可以看到“heap test passed”的输出
