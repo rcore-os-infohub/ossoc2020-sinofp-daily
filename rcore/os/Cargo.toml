@@ -14,3 +14,5 @@ panic = "abort"
 
 [dependencies]
 riscv = "0.6.0"
+buddy_system_allocator = "0.4.0"
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }

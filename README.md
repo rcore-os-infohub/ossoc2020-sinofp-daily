@@ -251,6 +251,9 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 
 - 写了实验一
 
+    <details>
+    <summary>点击展开</summary>
+
     1. 简述
 
         既然有gdb，为什么不用它呢？
@@ -290,6 +293,8 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 
         不过触发那里，我去掉rust_main最后的painc就可以直接请求地址0了，见上题。去掉后疯狂输出SUCCESS！
 
+    </details>
+
 - 感觉之前可能会错意了，应该是让我们跟着指导写自己的操作系统？
 
     重写了指导0、1的内容，不过因为看过了再写，而且这两个指导都是基础设施（Makefile、boot的汇编、切换上下文的汇编、println、SBI相关……），也不好写成别的样子，所以内容没啥大变动。
@@ -312,3 +317,43 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     有些已经停更了，有些大佬已经飞速进展快做完了，还有些大大佬已经完全在表演艺术了。
 
     我看有一些人是先整体看完所有指导再回头写代码、报告的，是个好方法，明天要么完善指导2代码，要么开始浏览后面的。
+
+## 200719
+
+- 做指导2前两个
+
+    <details>
+    <summary>点击展开</summary>
+
+    - 动态内存分配
+
+        既然说要用写好的crate，首先要在依赖中加入`buddy_system_allocator = "0.4.0"`
+
+        - error[E0433]: failed to resolve: use of undeclared type or module `alloc`
+
+            在main.rs里加`extern crate alloc;`，rust 2015曾经要求全部外部模块都要用它，2018自动为dependencies里的模块插入，但是在no_std下要用到rust core中的模块时，还是要手动加入这句extern crate
+
+        - error[E0412]: cannot find type `LockedHeap` in this scope
+
+            这应该就是指导里说的调用细节之一，加个use：`use buddy_system_allocator::LockedHeap;`
+
+        - error[E0425]: cannot find value `KERNEL_HEAP_SIZE` in this scope
+
+            加个`use crate::memory::config::KERNEL_HEAP_SIZE;`，感觉吧，rust有点傻
+
+        - error[E0658]: the `#[alloc_error_handler]` attribute is an experimental feature
+
+            这个超棒，rust直接把解决方法说了：main.rs加个`#![feature(alloc_error_handler)]`
+
+        到这里，Rust的“malloc”和“free”就全部支持了（当然还有找不到对应的alloc_error_handler）
+
+        复制指导里的Box、Vec测试，可以看到“heap test passed”的输出
+
+    </details>
+
+    前两个步骤我直接把自定义的类型用`type`定义为usize的别名，这样用起来方便，但是担心在之后的指导里这会成为累赘，所以打算先往后看，再考虑改不改回来。
+
+- 开会
+
+    - 我惊了国科大操作系统直接上板子
+    - 我惊了有人中断准备考研做这件事
