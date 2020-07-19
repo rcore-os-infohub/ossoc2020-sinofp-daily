@@ -17,3 +17,11 @@ extern "C" {
     /// 作为变量存在 [`KERNEL_END_ADDRESS`]
     fn kernel_end();
 }
+
+/// 页 / 帧大小，必须是 2^n
+pub const PAGE_SIZE: usize = 4096;
+
+/// 可以访问的内存区域起始地址
+pub const MEMORY_START_ADDRESS: PhysicalAddress = 0x8000_0000;
+/// 可以访问的内存区域结束地址
+pub const MEMORY_END_ADDRESS: PhysicalAddress = 0x8800_0000;
