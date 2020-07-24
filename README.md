@@ -357,3 +357,57 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 
     - 我惊了国科大操作系统直接上板子
     - 我惊了有人中断准备考研做这件事
+## 200720
+
+今天有事
+
+粗略看了指导3
+
+## 200721
+
+今天有事
+
+粗略看了指导4
+
+## 200722
+
+今天有事
+
+粗略看了指导5
+
+## 200723
+
+粗略看了指导6
+
+感觉真的可以把指导2里那两个usize包装结构体换成usize，不过还是算了吧，有点回到C的感觉
+
+## 200724
+
+- 补完指导2的剩余代码
+
+<details>
+<summary>报告底稿</summary>
+
+接着7.19的说，也就是，这一部分只说《物理内存管理》
+
+- 首先是之前决定还是把物理地址、页号从usize的别名换成单独的类，所以先要在memory/address中去掉data，换成struct（当然还有各种#\[\]）
+- 示例代码里直接写了两个宏去生成包装类（原谅我，我还是喜欢叫它类）的方法，不过我觉得这样太乱，所以决定先编译，报错需要哪个再补上相应代码
+- 首先按照“分配与回收”填上FrameTracker的代码。FrameTracker有些类似于页框在操作系统中的描述
+- FrameTracker需要用into把页号转成物理地址，所以我们得`impl From<PhysicalPageNumber> for PhysicalAddress`（不过我记得这个报错是很靠后的，具体报错顺序记不清了）
+- 按指导，接着是frame/allocator，这个要加的代码就多了。
+
+    - 首先是Mutex，这个需要spin包，所以得在Cargo.toml里加上一句
+    - FrameAllocatorx只是包装了AllocatorImpl的一些方法，而AllocatorImpl在示例代码中放到了单独的仓库algorithm下，不过俺觉得这有些分离了，所以直接在memory文件夹里又开了一个allocator文件夹放这些代码。
+    - 然后FrameAllocator::alloc需要用到物理页号+usize的操作，返回的也是物理页号，直接self.start_ppn.0+usize，再用PhysicalPageNumer新建一个有些累赘了，所以回到adress里实现`core::ops::Add<usize> for PhysicalPageNumber`（实现方法就是前面说的累赘代码）
+    - dealloc还需要页号-usize得到usize的，这里直接访问页号内部的usize即可，无需添加新的代码。
+    - 然后说一下FrameAllocator和AllocatorImpl的关系，有点像经理和打工仔：一开始FrameAllocator告诉AllocatorImpl有多少空间可分配，然后真正需要空间时，再由打工仔看看到底可不可行，并且记录当前状态。o
+    - 所以经理怎么知道有多少空间可用？config中得到了kernel在内存中结束的地址，并设定了内存结束地址，它俩相减即可得到可用空间，这个范围由memory::Range表示
+    - 其实我是觉得和core的Range重名不太好的，但它的确是个Range，再没有更合适的名字了，总之，我们还得去实现Range
+    - Range也没啥，就记着俩数，需要from、len就实现好了。不过rcore的Range想做成能装换成usize且能从usize转回来的类型都能用的泛型，所以还得回头往address里补上和usize之间的转换
+- 然后应当没什么问题了，这个实验主要思想是
+
+    1. 留一块内核专用的空间，用来分配堆内存，分配好之后内核就可以执行需要动态分配内存的代码了。
+    2. 直接把可用的物理内存按PAGE_SIZE分成物理页
+    3. 使用某种方法（AllocatorImpl可切换）以页为单位（FrameAllocator）去申请、释放内存（也就是页框）
+    4. 交给其他代码使用页分配器时，又加了一层Mutex防止冲突
+</details>
