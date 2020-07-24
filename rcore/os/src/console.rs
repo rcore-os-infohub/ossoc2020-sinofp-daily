@@ -11,8 +11,9 @@
 //! [`write_str`]: core::fmt::Write::write_str
 //! [`write_fmt`]: core::fmt::Write::write_fmt
 
-use crate::sbi::*;
 use core::fmt::{self, Write};
+
+use crate::sbi::*;
 
 /// 一个 [Zero-Sized Type]，实现 [`core::fmt::Write`] trait 来进行格式化输出
 ///

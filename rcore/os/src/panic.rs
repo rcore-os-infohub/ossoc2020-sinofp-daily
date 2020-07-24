@@ -1,7 +1,8 @@
 //! 代替 std 库，实现 panic 和 abort 的功能
 
-use crate::sbi::shutdown;
 use core::panic::PanicInfo;
+
+use crate::sbi::shutdown;
 
 /// 打印 panic 的信息并 [`shutdown`]
 ///

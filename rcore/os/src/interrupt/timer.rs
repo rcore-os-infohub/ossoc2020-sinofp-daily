@@ -1,7 +1,8 @@
 //! 预约和处理时钟中断
 
-use crate::sbi::set_timer;
 use riscv::register::{sie, sstatus, time};
+
+use crate::sbi::set_timer;
 
 /// 初始化时钟中断
 ///

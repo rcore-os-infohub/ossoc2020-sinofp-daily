@@ -1,3 +1,5 @@
+use crate::memory::{address::{PhysicalAddress, PhysicalPageNumber}, frame::FRAME_ALLOCATOR};
+
 /// 分配出的物理页
 ///
 /// 页框的tracker

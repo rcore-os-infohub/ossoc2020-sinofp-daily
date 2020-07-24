@@ -1,9 +1,12 @@
-use super::context::Context;
-use crate::interrupt::timer;
 use riscv::register::{
     scause::{Exception, Interrupt, Scause, Trap},
     stvec,
 };
+
+use crate::interrupt::timer;
+
+use super::context::Context;
+
 global_asm!(include_str!("./interrupt.asm"));
 
 /// 初始化中断处理

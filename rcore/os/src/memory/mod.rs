@@ -1,9 +1,12 @@
 pub mod config;
 pub mod heap;
 pub mod address;
+pub mod frame;
+pub mod range;
+pub mod allocator;
 
-/// 一个缩写，模块中一些函数会使用
-// pub type MemoryResult<T> = Result<T, &'static str>;
+/// 一个缩写，模块中一些函数会使用src/memory/frame/allocator.rs:pub fn alloc(&mut self) -> MemoryResult<FrameTracker>
+pub type MemoryResult<T> = Result<T, &'static str>;
 
 /// 初始化内存相关的子模块
 ///
