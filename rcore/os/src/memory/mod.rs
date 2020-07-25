@@ -1,12 +1,15 @@
+pub use address::*;
+pub use config::*;
+pub use frame::*;
+pub use range::*;
+
 pub mod config;
 pub mod heap;
 pub mod address;
 pub mod frame;
 pub mod range;
 pub mod allocator;
-
-pub use address::*;
-pub use config::*;
+pub mod mapping;
 
 /// 一个缩写，模块中一些函数会使用
 /// src/memory/frame/allocator.rs:pub fn alloc(&mut self) -> MemoryResult<FrameTracker>

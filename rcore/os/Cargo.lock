@@ -25,6 +25,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a165d606cf084741d4ac3a28fb6e9b1eb0bd31f6cd999098cfddb0b2ab381dc0"
 
 [[package]]
+name = "bitflags"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
+
+[[package]]
 name = "buddy_system_allocator"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -53,6 +59,8 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 name = "os"
 version = "0.1.0"
 dependencies = [
+ "bit_field",
+ "bitflags",
  "buddy_system_allocator",
  "lazy_static",
  "riscv",

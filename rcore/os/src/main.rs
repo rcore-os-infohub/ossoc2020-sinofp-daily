@@ -28,6 +28,11 @@ pub extern "C" fn rust_main() -> ! {
     check_heap();
     check_physical_page();
 
+    let remap = memory::mapping::MemorySet::new_kernel().unwrap();
+    remap.activate();
+
+    println!("kernel remapped");
+
     println!("\nPleased to meet you, hope you guess my- name.");
     loop {}
 }

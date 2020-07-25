@@ -5,6 +5,7 @@ use buddy_system_allocator::LockedHeap;
 /// 大小为 [`KERNEL_HEAP_SIZE`]
 /// 这段空间编译后会被放在操作系统执行程序的 bss 段
 use super::*;
+
 static mut HEAP_SPACE: [u8; KERNEL_HEAP_SIZE] = [0; KERNEL_HEAP_SIZE];
 
 #[global_allocator]
