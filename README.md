@@ -411,3 +411,9 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
     3. 使用某种方法（AllocatorImpl可切换）以页为单位（FrameAllocator）去申请、释放内存（也就是页框）
     4. 交给其他代码使用页分配器时，又加了一层Mutex防止冲突
 </details>
+
+## 200725
+
+- 写lab3
+
+    指导3增加了好多类型……我觉得，可能更简单的理解方式是找出哪些类型一起实现了哪个功能，在写报告时会尽量表达出来。
