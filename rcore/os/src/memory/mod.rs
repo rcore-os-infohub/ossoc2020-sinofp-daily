@@ -5,6 +5,9 @@ pub mod frame;
 pub mod range;
 pub mod allocator;
 
+pub use address::*;
+pub use config::*;
+
 /// 一个缩写，模块中一些函数会使用
 /// src/memory/frame/allocator.rs:pub fn alloc(&mut self) -> MemoryResult<FrameTracker>
 pub type MemoryResult<T> = Result<T, &'static str>;

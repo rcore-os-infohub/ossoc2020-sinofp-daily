@@ -1,5 +1,4 @@
-use crate::memory::config::PAGE_SIZE;
-
+use super::*;
 /// 物理地址
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -10,10 +9,20 @@ pub struct PhysicalAddress(pub usize); // 没办法，要impl就只能包裹起�
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PhysicalPageNumber(pub usize);
 
+/// 虚拟地址
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct VirtualAddress(pub usize);
+
 // 输出
 impl core::fmt::Display for PhysicalAddress {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}(0x{:x})", stringify!(PhysicalAddress), self.0)
+    }
+}
+impl core::fmt::Display for VirtualAddress {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{}(0x{:x})", stringify!(VirtualAdress), self.0)
     }
 }
 
@@ -38,6 +47,20 @@ impl From<PhysicalPageNumber> for usize {
     }
 }
 
+// 页号转物理地址
+impl From<PhysicalPageNumber> for PhysicalAddress {
+    fn from(pg: PhysicalPageNumber) -> Self {
+        Self(pg.0 * PAGE_SIZE)
+    }
+}
+
+/// 虚拟地址转物理地址
+impl From<VirtualAddress> for PhysicalAddress {
+    fn from(vaddr:VirtualAddress) -> Self {
+        Self(vaddr.0 - KERNEL_MAP_OFFSET)
+    }
+}
+
 // map(|offset| FrameTracker(self.start_ppn + offset))
 impl core::ops::Add<usize> for PhysicalPageNumber {
     type Output = Self;
@@ -46,9 +69,3 @@ impl core::ops::Add<usize> for PhysicalPageNumber {
     }
 }
 
-// 页号转物理地址
-impl From<PhysicalPageNumber> for PhysicalAddress {
-    fn from(pg: PhysicalPageNumber) -> Self {
-        Self(pg.0 * PAGE_SIZE)
-    }
-}

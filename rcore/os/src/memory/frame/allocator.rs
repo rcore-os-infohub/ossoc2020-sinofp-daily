@@ -1,17 +1,12 @@
 use lazy_static::*;
 use spin::Mutex;
 
-use crate::memory::{
-    address::PhysicalPageNumber,
-    allocator::{Allocator, AllocatorImpl}, config::*, frame::FrameTracker, MemoryResult,
-    range::*,
-};
-
+use crate::memory::{address::PhysicalPageNumber, allocator::{Allocator, AllocatorImpl}, config::*, frame::FrameTracker, MemoryResult, range::*, PhysicalAddress};
 lazy_static! {
     /// 帧分配器
     pub static ref FRAME_ALLOCATOR: Mutex<FrameAllocator<AllocatorImpl>> =
         Mutex::new(FrameAllocator::new(Range::from(
-            PhysicalPageNumber::ceil(*KERNEL_END_ADDRESS)..PhysicalPageNumber::floor(MEMORY_END_ADDRESS),
+            PhysicalPageNumber::ceil((*KERNEL_END_ADDRESS).into())..PhysicalPageNumber::floor(MEMORY_END_ADDRESS),
         )
     ));
 }
