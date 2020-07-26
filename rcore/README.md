@@ -226,3 +226,75 @@ pub static ref KERNEL_END_ADDRESS: PhysicalAddress = PhysicalAddress(kernel_end 
 2. 直接把可用的物理内存按PAGE_SIZE分成物理页
 3. 使用某种方法（AllocatorImpl可切换）以页为单位（FrameAllocator）去申请、释放内存（也就是页框）
 4. 交给其他代码使用页分配器时，又加了一层Mutex防止冲突
+
+## lab3
+
+lab3可多了好多内容……因为有了虚拟内存+分页
+
+### 修改内核
+
+之前是把BASE_ADDRESS放在0x80200000，现在要改成0xffffffff80200000“虚拟地址”。此时虚拟地址到物理地址的映射即为虚拟=物理+0xffffffff00000000
+
+首先要改的是链接脚本，它负责把rcore的各段代码放在在BASE_ADDRESS之后
+
+还有一个改动是加入了很多“. = ALIGN(4K);”，因为我们的页大小是4k，如果同一个页中有部分是A段有部分是B段就尴尬了，因为我们不知道到底应该在这个页上放哪个段的权限。
+
+memory/config.rs中也把KERNEL_END_ADDRESS从物理地址类型改为了虚拟地址类型，并新增`pub const KERNEL_MAP_OFFSET: usize = 0xffff_ffff_0000_0000;`表示物理与虚拟之间的换算关系
+
+如代码所示，转换关系就是通过加减KERNEL_MAP_OFFSET实现的。
+
+```rust
+impl From<VirtualAddress> for PhysicalAddress {
+    fn from(vaddr: VirtualAddress) -> Self {
+        Self(vaddr.0 - KERNEL_MAP_OFFSET)
+    }
+}
+
+
+impl From<PhysicalAddress> for VirtualAddress {
+    fn from(pa: PhysicalAddress) -> Self {
+        Self(pa.0 + KERNEL_MAP_OFFSET)
+    }
+}
+```
+
+rust这一点挺好，在语言层面规范了类型转换的惯例。这样就不用写“physicalAddrToVirtualAddr”这样的函数，而是在需要时直接into()就好了。（不过有时这种疯狂into也会造成阅读问题）
+
+在entry.asm中打开通过satp寄存器打开Sv39分页模式，然后加载boot_stack_top、跳转到rust_main。就可以看到熟悉的100TICKS……（嗯，我把时钟中断的输出一直保留到现在，方便看到底有问题没有）
+
+### 实现页表
+
+这里有要用新的crate实现位操作，感觉rust有点弱啊……不过可以直接对Range操作，还行挺现代
+
+感觉抓住思想的方法可以是直接看它为了实现页表（和相关分配）新增了哪些类型：
+
+1. PageTableEntry页表项，占用8字节（所以还是usize）
+2. PageTable页表，存储页表项，只存储PAGE_SIZE / sizeof PageTableEntry个，意味页表只在内存中占一页
+3. PageTableTracker，用来追踪页表的类
+
+    - PageTableTracker放在操作系统的堆里，PageTable放在对应的页里
+    - 操作PageTableTracker会因为自动解引用（实现了Deref），变为对所追踪的PageTable的操作（目前仅是创建时的zero_init）
+    - PageTableTracker被drop时也会自动drop PageTable
+
+    这里用PageTableTracker套住PageTable，貌似是因为不想“把这个巨大的数组在函数之间不停传递”，把PageTableTracker放在操作系统的堆里的确提供了相对稳定的地址，但这样感觉有些复杂了。
+
+4. Segment“内存段”，本意是对一系列页实行同样的权限管理，有些像分段
+
+    - 为了让用户得到同样的虚拟内存空间，分为操作系统自用的线性映射和给用户用的按页框（Frame）的映射
+    - Segment就是记录了映射方式、虚拟内存范围、这一段权限的结构体
+
+5. Mapping，连通物理页号、虚拟页号、页框的映射。
+
+    查找页，没有时创建都用到它
+
+6. MemorySet，给每个线程虚拟出来的映射关系
+
+    包含了Mapping记录线程的映射，还有Segment，各个段的权限（new时就要初始化这些权限）
+
+    另外这里指导有个问题，`let mut allocated_pairs = Vec::new();`这句话rust推到不出它new的是什么类型的向量，因为后头再也没用了。我看示例代码中也没有。
+
+### lab3总结
+
+多了好多内容啊……
+
+使用rust把类型包来包去，而不是留个指针，感觉怪怪的，这就是现代化么？有种走歪路的感觉……
