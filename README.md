@@ -430,3 +430,11 @@ https://github.com/rcore-os/rCore/wiki/os-tutorial-summer-of-code
 - 赶紧补前几个lab的报告
 
     - 感觉有些写不完了，不过，到现在也算新学了不少东西，只是比起别人远远不够罢了。
+
+## 200727
+
+今天有事
+
+- lab4写了一半
+
+    没想到还要碰interrupt.asm，感觉让interrupt_handler返回Context有点不合适。时钟中断时返回调度器选择的下一线程的Context，配合interrupt.asm中新增的代码可以切换Context，别的中断也可以直接返回传入的Context。看起来很简洁，但感觉切换线程相关的触发点应该让时钟中断的代码自己触发，而不是让其他中断也要返回什么东西。不过可能再往后写会发现这样做的好处。
